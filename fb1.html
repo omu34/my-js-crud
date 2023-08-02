@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Facebook Integration Example</title>
+  <script src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&amp;version=v3.2&amp;appId=5673167329442763&amp;autoLogAppEvents=1"></script>
+  <style>
+    img {
+      max-width: 200px;
+      max-height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Facebook </h1>
+  <button onclick="handleFacebookLogin()">Login with Facebook</button>
+  <div id="profilePictureContainer"></div>
+
+  <script>
+    // Initialize the Facebook SDK with your app ID
+    FB.init({
+      appId: '5673167329442763',
+      cookie: true,
+      xfbml: true,
+      version: 'v3.2'
+    });
+
+    // Handle the login status and user data
+    function handleFacebookLogin() {
+      FB.login(function(response) {
+        if (response.status === 'connected') {
+          // The user is logged in and authorized your app
+          var accessToken = response.authResponse.accessToken;
+          // Retrieve user data and perform actions
+          retrieveUserData(accessToken);
+          // Example: Post a message on the user's Facebook timeline
+          postToFacebookTimeline("Hello from my website!");
+          // Example: Perform additional actions after redirecting to the Facebook app
+          performAdditionalActions();
+        } else if (response.status === 'not_authorized') {
+          // The user is logged in to Facebook but has not authorized your app
+          // Perform actions accordingly, such as displaying an authorization prompt
+          // ...
+        } else {
+          // The user is logged out of Facebook
+          // Perform actions accordingly, such as displaying a login button
+          // ...
+        }
+      }, { scope: 'public_profile,email,user_posts' });
+    }
+
+    function retrieveUserData(accessToken) {
+      FB.api('/me', { fields: 'id, name, email' }, function(response) {
+        if (!response || response.error) {
+          console.error('Error retrieving user data:', response ? response.error : 'Unknown error');
+        } else {
+          var userId = response.id;
+          var userName = response.name;
+          var userEmail = response.email;
+          // Perform actions with the user data
+          // Example: Display the user's name on the website
+          document.getElementById('userName').textContent = userName;
+          // Example: Send the user's data to the server
+          sendUserDataToServer(userId, userName, userEmail);
+        }
+      });
+    }
+
+    function postToFacebookTimeline(message) {
+      FB.api('/me/feed', 'post', { message: message }, function(response) {
+        if (!response || response.error) {
+          console.error('Error posting to Facebook:', response ? response.error : 'Unknown error');
+        } else {
+          console.log('Message posted to Facebook:', response);
+        }
+      });
+    }
+
+    function performAdditionalActions() {
+      // Implement additional actions after redirecting to the Facebook app
+      // ...
+      // Example: Display a success message or perform UI changes
+      var successMessageElement = document.createElement('p');
+      successMessageElement.textContent = 'Successfully redirected to the Facebook app!';
+      document.body.appendChild(successMessageElement);
+    }
+
+    function sendUserDataToServer(userId, userName, userEmail) {
+      // Implement the code to send the user's data to the server
+      // ...
+      // Example: Send an AJAX request to the server
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/api/user', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            console.log('User data sent to the server successfully!');
+          } else {
+            console.error('Error sending user data to the server:', xhr.status);
+          }
+        }
+      };
+      var data = {
+        userId: userId,
+        userName: userName,
+        userEmail: userEmail
+      };
+      xhr.send(JSON.stringify(data));
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Facebook Integration Example</title>
+  <script src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=5673167329442763&autoLogAppEvents=1"></script>
+  <style>
+    img {
+      max-width: 200px;
+      max-height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Facebook Integration Example</h1>
+  <button onclick="handleFacebookLogin()">Login with Facebook</button>
+  <div id="profilePictureContainer"></div>
+
+  <script>
+    // Initialize the Facebook SDK with your app ID
+    FB.init({
+      appId: '5673167329442763',
+      cookie: true,
+      xfbml: true,
+      version: 'v3.2'
+    });
+
+    // Handle the login status and user data
+    function handleFacebookLogin() {
+      FB.login(function(response) {
+        if (response.status === 'connected') {
+          // The user is logged in and authorized your app
+          var accessToken = response.authResponse.accessToken;
+          // Get user data
+          FB.api('/me', { fields: 'id, name, email' }, function(response) {
+            var userId = response.id;
+            var userName = response.name;
+            var userEmail = response.email;
+            // Perform actions with the user data
+            // ...
+            // Example: Post a message on the user's Facebook timeline
+            FB.api('/me/feed', 'post', { message: 'Hello from my website!' }, function(response) {
+              if (!response || response.error) {
+                console.error('Error posting to Facebook:', response.error);
+              } else {
+                console.log('Message posted to Facebook:', response);
+              }
+            });
+            // Example: Retrieve user's profile picture
+            FB.api('/me/picture', { type: 'large' }, function(response) {
+              if (!response || response.error) {
+                console.error('Error retrieving profile picture:', response.error);
+              } else {
+                var profilePictureUrl = response.data.url;
+                // Display the profile picture on the website
+                var profilePictureElement = document.createElement('img');
+                profilePictureElement.src = profilePictureUrl;
+                profilePictureElement.alt = 'Profile Picture';
+                document.getElementById('profilePictureContainer').appendChild(profilePictureElement);
+              }
+            });
+          });
+        } else {
+          // The user is logged out or has not authorized your app
+          // Perform actions accordingly
+          // ...
+        }
+      }, { scope: 'public_profile,email,user_posts' });
+    }
+  </script>
+</body>
+</html>

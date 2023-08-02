@@ -1,0 +1,79 @@
+/* Reset default browser styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Body styles */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+  }
+  
+  /* Form styles */
+  #productForm {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input[type="text"],
+  input[type="number"],
+  input[type="file"] {
+    margin-bottom: 10px;
+    padding: 5px;
+    width: 200px;
+  }
+  
+  button[type="submit"] {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Table styles */
+  #productTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  #productTable th,
+  #productTable td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  #productTable th {
+    background-color: #f4f4f4;
+  }
+  
+  #productTable img {
+    max-width: 100px;
+    max-height: 100px;
+  }
+  
+  /* Button styles */
+  button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
